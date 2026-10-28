@@ -1,0 +1,302 @@
+@font-face {
+  font-family: 'Paddis';
+  src: url('Paddis_Handwritten.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  image-rendering: auto;
+}
+
+body {
+  background: #1a2238;
+  color: #e8f0ff;
+  font-family: 'Paddis', 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 16px 8px;
+  overflow-x: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+#game-container {
+  width: 100%;
+  max-width: 1320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+header {
+  width: 100%;
+  text-align: left;
+  padding-left: 8px;
+}
+
+header h1 {
+  font-family: 'Paddis', sans-serif;
+  font-size: clamp(28px, 5vw, 44px);
+  color: #a8c4ff;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 0 #0a1228;
+}
+
+#hud {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  font-size: clamp(18px, 2.4vw, 24px);
+  color: #c8d8ff;
+  line-height: 1.5;
+}
+
+#canvas-wrap {
+  width: 100%;
+  border: 4px solid #374273;
+  box-shadow: 0 0 0 2px #0a1228, 6px 6px 0 #0a1228;
+  background: #2a3458;
+  position: relative;
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #3a4a78;
+}
+
+#controls-hint {
+  width: 100%;
+  font-size: clamp(16px, 2.2vw, 22px);
+  color: #8aa0d0;
+  text-align: left;
+  padding-left: 8px;
+  line-height: 1.5;
+}
+
+#buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#buttons button,
+#overlay-restart,
+#btn-select-play {
+  background: #374273;
+  color: #e8f0ff;
+  border: 3px solid #6a8ad0;
+  padding: 12px 18px;
+  font-family: 'Paddis', sans-serif;
+  font-size: clamp(16px, 2.2vw, 20px);
+  cursor: pointer;
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 #0a1228;
+  transition: none;
+}
+
+#buttons button:hover:not(:disabled),
+#overlay-restart:hover,
+#btn-select-play:hover {
+  background: #4a5a93;
+}
+
+#buttons button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+#mobile-controls {
+  display: none;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+  max-width: 360px;
+}
+
+.mobile-btn {
+  width: 68px;
+  height: 68px;
+  font-size: 24px;
+  background: #374273;
+  color: #e8f0ff;
+  border: 3px solid #6a8ad0;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 #0a1228;
+  cursor: pointer;
+  touch-action: none;
+  font-family: sans-serif;
+}
+
+.mobile-btn.jump {
+  background: #2a4a73;
+  border-color: #7ab0ff;
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+  #mobile-controls {
+    display: flex;
+  }
+  #controls-hint {
+    display: none;
+  }
+}
+
+/* Character select */
+#char-select {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(96%, 720px);
+  background: rgba(26, 34, 56, 0.96);
+  border: 4px solid #374273;
+  box-shadow: 6px 6px 0 #0a1228;
+  padding: 18px 14px 20px;
+  z-index: 20;
+  text-align: center;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#char-select h2 {
+  font-family: 'Paddis', sans-serif;
+  font-size: clamp(22px, 4vw, 32px);
+  color: #a8c4ff;
+  margin-bottom: 14px;
+  line-height: 1.3;
+  text-shadow: 2px 2px 0 #0a1228;
+}
+
+#char-cards {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.char-card {
+  background: #2a3458;
+  padding: 10px 8px 12px;
+  cursor: pointer;
+  width: 130px;
+  border-radius: 8px;
+  transition: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.char-card:hover,
+.char-card.selected {
+  border-color: #7ab0ff;
+  background: #374273;
+  box-shadow: 0 0 0 3px #7ab0ff;
+}
+
+.char-card canvas {
+  display: block;
+  margin: 0 auto 6px;
+  background: transparent;
+  pointer-events: none;
+}
+
+.char-card span {
+  font-size: 16px;
+  color: #c8d8ff;
+  font-family: 'Paddis', sans-serif;
+}
+
+#char-select .hint {
+  font-size: 16px;
+  color: #8aa0d0;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+#btn-select-play {
+  display: inline-block;
+  margin-top: 4px;
+  min-width: 140px;
+}
+
+#char-select.hidden {
+  display: none;
+}
+
+/* Overlay win/lose */
+#overlay {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(96%, 420px);
+  z-index: 30;
+}
+
+#overlay.hidden {
+  display: none;
+}
+
+#overlay-content {
+  background: rgba(26, 34, 56, 0.96);
+  border: 4px solid #374273;
+  box-shadow: 6px 6px 0 #0a1228;
+  padding: 24px 18px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+#overlay-title {
+  font-family: 'Paddis', sans-serif;
+  font-size: clamp(24px, 4vw, 34px);
+  color: #a8c4ff;
+  margin-bottom: 12px;
+  text-shadow: 2px 2px 0 #0a1228;
+}
+
+#overlay-message {
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: #c8d8ff;
+  line-height: 1.6;
+  white-space: pre-line;
+  margin-bottom: 16px;
+}
+
+#overlay-restart {
+  display: inline-block;
+}
+
+/* Mobile-friendly char cards */
+@media (max-width: 600px) {
+  #char-select {
+    top: 50px;
+    padding: 14px 10px 16px;
+  }
+  .char-card {
+    width: 100px;
+    padding: 8px 6px 10px;
+  }
+  .char-card canvas {
+    width: 80px !important;
+    height: 70px !important;
+  }
+  .char-card span {
+    font-size: 12px;
+  }
+}
